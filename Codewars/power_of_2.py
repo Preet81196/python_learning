@@ -6,4 +6,3 @@ def powers_of_two(n):
 
 
 print(powers_of_two(0))
-print(powers_of_two(1))
