@@ -10,74 +10,125 @@ class Card:
 
 class Deck:
     def __init__(self):
-        self.cards = []
-        ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, "Jack", "Queen", "King", "Ace"]
+        ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
         suits = ["Clubs", "Diamonds", "Hearts", "Spades"]
-        for suit in suits:
-            for rank in ranks:
-                self.cards.append(Card(rank, suit))
+        self.cards = [Card(rank, suit) for rank in ranks for suit in suits]
 
     def shuffle(self):
         random.shuffle(self.cards)
 
-    def deal(self, num_cards):
-        dealt_cards = []
-        for i in range(num_cards):
-            dealt_cards.append(self.cards.pop())
-        return dealt_cards
+    def deal(self):
+        return self.cards.pop()
 
-class Game:
+deck = Deck()
+deck.shuffle()
+print(f"Total number of cards in the deck: {len(deck.cards)}")
+
+player_hand = [deck.deal(), deck.deal()]
+dealer_hand = [deck.deal(), deck.deal()]
+
+while True:
+    player_points = sum(card.rank for card in player_hand)
+    print(f"Player's hand: {player_hand}, total points: {player_points}")
+    if player_points > 21:
+        print("Player loses!")
+        break
+    elif player_points == 21:
+        print("Player wins!")
+        break
+
+    choice = input("Do you want another card? (y/n)")
+    if choice == "y":
+        player_hand.append(deck.deal())
+    else:
+        break
+
+while True:
+    dealer_points = sum(card.rank for card in dealer_hand)
+    print(f"Dealer's hand: {dealer_hand}, total points: {dealer_points}")
+    if dealer_points > 21:
+        print("Dealer loses!")
+        break
+    elif dealer_points >= 16:
+        if dealer_points > player_points:
+            print("Dealer wins!")
+        elif dealer_points < player_points:
+            print("Player wins!")
+        else:
+            print("Tie!")
+        break
+    else:
+        dealer_hand.append(deck.deal())
+        
+play_again = input("Do you want to play again? (y/n)")
+if play_again == "y":
+    continue
+else:
+    break
+import random
+
+class Card:
+    def __init__(self, rank, suit):
+        self.rank = rank
+        self.suit = suit
+
+    def __str__(self):
+        return f"{self.rank} of {self.suit}"
+
+class Deck:
     def __init__(self):
-        self.deck = Deck()
-        self.deck.shuffle()
-        self.player_cards = []
-        self.dealer_cards = []
-        self.player_points = 0
-        self.dealer_points = 0
-        self.game_over = False
+        ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
+        suits = ["Clubs", "Diamonds", "Hearts", "Spades"]
+        self.cards = [Card(rank, suit) for rank in ranks for suit in suits]
 
-    def start(self):
-        print("Welcome to Blackjack!")
-        print("Dealing cards...")
-        self.player_cards = self.deck.deal(2)
-        self.dealer_cards = self.deck.deal(2)
-        self.player_points = self.calculate_points(self.player_cards)
-        self.dealer_points = self.calculate_points(self.dealer_cards)
-        self.display_cards()
+    def shuffle(self):
+        random.shuffle(self.cards)
 
-        while not self.game_over:
-            self.player_turn()
-            if self.game_over:
-                break
-            self.dealer_turn()
-            self.determine_winner()
-            self.play_again()
-            
-    def player_turn(self):
-        while True:
-            choice = input("Would you like to hit or stay? (h/s) ")
-            if choice == "h":
-                self.player_cards.append(self.deck.deal(1)[0])
-                self.player_points = self.calculate_points(self.player_cards)
-                self.display_cards()
-                if self.player_points > 21:
-                    print("You have lost the game.")
-                    self.game_over = True
-                    break
-                elif self.player_points == 21:
-                    print("You have won the game.")
-                    self.game_over = True
-                    break
-            elif choice == "s":
-                break
-            else:
-                print("Invalid choice. Please enter 'h' or 's'.")
+    def deal(self):
+        return self.cards.pop()
 
-    def dealer_turn(self):
-        while self.dealer_points < 16:
-            self.dealer_cards.append(self.deck.deal(1)[0])
-            self.dealer_points = self.calculate_points(self.dealer_cards)
+deck = Deck()
+deck.shuffle()
+print(f"Total number of cards in the deck: {len(deck.cards)}")
 
-    def determine_winner(self):
-        if self.player_points > 21:
-            print
+player_hand = [deck.deal(), deck.deal()]
+dealer_hand = [deck.deal(), deck.deal()]
+
+while True:
+    player_points = sum(card.rank for card in player_hand)
+    print(f"Player's hand: {player_hand}, total points: {player_points}")
+    if player_points > 21:
+        print("Player loses!")
+        break
+    elif player_points == 21:
+        print("Player wins!")
+        break
+
+    choice = input("Do you want another card? (y/n)")
+    if choice == "y":
+        player_hand.append(deck.deal())
+    else:
+        break
+
+while True:
+    dealer_points = sum(card.rank for card in dealer_hand)
+    print(f"Dealer's hand: {dealer_hand}, total points: {dealer_points}")
+    if dealer_points > 21:
+        print("Dealer loses!")
+        break
+    elif dealer_points >= 16:
+        if dealer_points > player_points:
+            print("Dealer wins!")
+        elif dealer_points < player_points:
+            print("Player wins!")
+        else:
+            print("Tie!")
+        break
+    else:
+        dealer_hand.append(deck.deal())
+        
+play_again = input("Do you want to play again? (y/n)")
+if play_again == "y":
+    continue
+else:
+    break
